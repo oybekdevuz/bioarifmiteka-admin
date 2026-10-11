@@ -3,7 +3,6 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
 import { extractError } from "../lib/api";
 import logoSm from "../assets/images/logo-sm.svg";
-import authBg from "../assets/images/auth-bg.jpg";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,8 +31,8 @@ export default function Login() {
   return (
     <div className="auth-page">
       <div className="container-fluid p-0">
-        <div className="row g-0">
-          <div className="col-xxl-3 col-lg-4 col-md-5">
+        <div className="row g-0 justify-content-center">
+          <div className="col-xxl-3 col-lg-4 col-md-6 col-sm-9">
             <div className="auth-full-page-content d-flex p-sm-5 p-4">
               <div className="w-100">
                 <div className="d-flex flex-column h-100">
@@ -114,17 +113,6 @@ export default function Login() {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="col-xxl-9 col-lg-8 col-md-7">
-            <div
-              className="auth-bg pt-md-5 p-4 d-flex"
-              style={{
-                backgroundImage: `url(${authBg})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                minHeight: "100vh",
-              }}
-            />
           </div>
         </div>
       </div>
