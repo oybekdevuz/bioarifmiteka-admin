@@ -31,6 +31,7 @@ function SidebarItem({ item }: { item: Item }) {
 const items: Item[] = [
   { to: "/", label: "Bosh sahifa", icon: "bx-home-circle" },
   { to: "/users", label: "Foydalanuvchilar", icon: "bx-user" },
+  { to: "/plans", label: "Tariflar", icon: "bx-purchase-tag" },
   { to: "/settings", label: "Sozlamalar", icon: "bx-cog" },
 ];
 

@@ -68,6 +68,26 @@ export interface DashboardData {
   users: MetricSummary & { total: number; premium: number };
   revenue: MetricSummary & { total: number; payments_count: number };
   ai: MetricSummary & { total: number; questions: number; model: string };
+  /** Sotuvda tarif yo'q — bot hamma uchun bepul */
+  free_mode: boolean;
+  plans: PlanStat[];
+}
+
+/** Bitta tarifni nechta odam olgani (har bir user bir marta sanaladi) */
+export interface PlanStat {
+  id: string;
+  name: string;
+  price: number;
+  is_active: boolean;
+  is_deleted: boolean;
+  /** Shu tarifni olganlar (jami) */
+  users: number;
+  /** Hozir faol obunasi borlar */
+  active: number;
+  /** To'lab olganlar */
+  paid: number;
+  /** Admin sovg'a qilganlar */
+  gift: number;
 }
 
 export type GrowthView = "week" | "month";
@@ -86,10 +106,16 @@ export interface GrowthData {
 export interface Plan {
   id: string;
   name: string;
+  /** Botda tarif tagida ko'rsatiladigan tavsif */
+  description: string;
   price: number;
   question_limit: number;
   duration_days: number;
+  /** Sotuvda (botda ko'rinadi) */
+  is_active: boolean;
 }
+
+export type PlanInput = Omit<Plan, "id">;
 
 export interface UserSubscription {
   plan_id: string;
@@ -126,6 +152,10 @@ export const adminApi = {
   growth: (view: GrowthView, date?: string) =>
     api.get<ApiResponse<GrowthData>>("/admin/users/growth", { params: { view, date } }).then((r) => r.data.data),
   plans: () => api.get<ApiResponse<Plan[]>>("/admin/plans").then((r) => r.data.data),
+  createPlan: (body: PlanInput) => api.post<ApiResponse<Plan>>("/admin/plans", body).then((r) => r.data.data),
+  updatePlan: (id: string, body: Partial<PlanInput>) =>
+    api.put<ApiResponse<Plan>>(`/admin/plans/${encodeURIComponent(id)}`, body).then((r) => r.data.data),
+  deletePlan: (id: string) => api.delete(`/admin/plans/${encodeURIComponent(id)}`).then((r) => r.data),
   users: (params: { page: number; limit: number; search?: string; premium?: string }) =>
     api.get<ApiResponse<UsersPage>>("/admin/users", { params }).then((r) => r.data.data),
   grant: (id: string, body: { plan_id: string; days?: number; question_limit?: number }) =>

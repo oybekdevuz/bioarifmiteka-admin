@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { adminApi, extractError, MetricSummary } from "../lib/api";
+import { Link } from "react-router-dom";
+import { adminApi, extractError, MetricSummary, PlanStat } from "../lib/api";
 import { formatNumber, formatSom, formatUsd } from "../lib/format";
 import GrowthChart from "../components/GrowthChart";
 
@@ -63,6 +64,72 @@ function Forecast({ metric, format, color }: ForecastProps) {
       <div className="d-flex justify-content-between small text-muted">
         <span>Shu oyda: {format(metric.month)}</span>
         <span>O'tgan oy: {format(metric.prev_month)}</span>
+      </div>
+    </div>
+  );
+}
+
+/** Har bir tarifni nechta odam olgani */
+function PlanStats({ plans, freeMode }: { plans: PlanStat[]; freeMode: boolean }) {
+  const count = (v: number) => formatNumber(v);
+  return (
+    <div className="card mt-3 mb-0">
+      <div className="card-body">
+        <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
+          <h5 className="card-title mb-0">Tariflar bo'yicha obunachilar</h5>
+          <Link to="/plans" className="small">
+            Tariflarni boshqarish
+          </Link>
+        </div>
+        <p className="text-muted small">
+          Har bir user tarif bo'yicha bir marta sanaladi. Bir user ham to'lab, ham sovg'a tarzida olgan bo'lishi
+          mumkin.
+        </p>
+        {freeMode && (
+          <div className="alert alert-warning py-2 small" role="status">
+            Sotuvda tarif yo'q — bot hozir hamma uchun bepul.
+          </div>
+        )}
+        <div className="table-responsive">
+          <table className="table align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Tarif</th>
+                <th className="text-end">Narx</th>
+                <th className="text-end">Olganlar</th>
+                <th className="text-end">Hozir faol</th>
+                <th className="text-end">To'lab olgan</th>
+                <th className="text-end">Sovg'a</th>
+              </tr>
+            </thead>
+            <tbody>
+              {plans.map((p) => (
+                <tr key={p.id}>
+                  <td>
+                    {p.name}
+                    {p.is_deleted ? (
+                      <span className="badge bg-secondary ms-2">O'chirilgan</span>
+                    ) : (
+                      !p.is_active && <span className="badge bg-secondary ms-2">Sotuvda emas</span>
+                    )}
+                  </td>
+                  <td className="text-end text-nowrap">{p.price ? formatSom(p.price) : "—"}</td>
+                  <td className="text-end fw-bold">{count(p.users)}</td>
+                  <td className="text-end">{count(p.active)}</td>
+                  <td className="text-end">{count(p.paid)}</td>
+                  <td className="text-end">{count(p.gift)}</td>
+                </tr>
+              ))}
+              {plans.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="text-center text-muted py-3">
+                    Tariflar yo'q
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
@@ -178,6 +245,8 @@ export default function Dashboard() {
         Prognoz: har bir hafta kuni uchun oxirgi 4 haftaning vaznli o'rtachasi (yaqin haftalar ko'proq hisobga
         olinadi) va oxirgi 7 kunlik trend asosida oyning qolgan kunlari hisoblanadi.
       </p>
+
+      <PlanStats plans={d.plans} freeMode={d.free_mode} />
     </>
   );
 }
