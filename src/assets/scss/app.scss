@@ -1,0 +1,128 @@
+/*
+Template: Minia - Admin & Dashboard Template (Themesbrand) — adapted for Vite + React.
+Only the plugins and pages actively used by this admin panel are imported.
+*/
+
+//Fonts
+@import "fonts/fonts";
+
+//Core files (bootstrap resolved via node_modules by Vite's sass handler)
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "variables";
+@import "variables-dark";
+@import "bootstrap/scss/mixins.scss";
+
+// Structure
+@import "structure/general";
+@import "structure/topbar";
+@import "structure/page-head";
+@import "structure/footer";
+@import "structure/right-sidebar";
+@import "structure/vertical";
+@import "structure/horizontal-nav";
+@import "structure/layouts";
+
+// Components
+@import "components/root";
+@import "components/waves";
+@import "components/accordion";
+@import "components/avatar";
+@import "components/helper";
+@import "components/modals";
+@import "components/forms";
+@import "components/widgets";
+@import "components/toasts";
+@import "components/demos";
+@import "components/print";
+@import "components/utilities";
+
+// Plugins (subset we actually use)
+@import "plugins/custom-scrollbar";
+@import "plugins/sweatalert2";
+@import "plugins/switch";
+
+// Pages (subset we actually use)
+@import "pages/authentication";
+
+// --- Admin panel layout overrides (no topbar) ---
+.vertical-menu {
+    top: 0 !important;
+}
+
+.page-content {
+    padding-top: 1.5rem !important;
+}
+
+// Sidebar logo spacing — tighter when no topbar
+#layout-wrapper .navbar-brand-box {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding-left: 1.5rem;
+    border-bottom: 1px solid var(--#{$prefix}border-color);
+}
+
+// Sidebar footer (logout button area)
+.sidebar-footer {
+    border-top: 1px solid var(--#{$prefix}border-color);
+}
+
+// --- Dashboard stat card polish ---
+.stat-card {
+    transition: transform .15s ease, box-shadow .15s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .06);
+    }
+
+    .stat-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1.1;
+        margin: 0;
+    }
+
+    .stat-label {
+        color: var(--#{$prefix}secondary-color);
+        font-size: .82rem;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        margin-bottom: .25rem;
+    }
+
+    .stat-sub-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .5rem .75rem;
+        padding-top: 1rem;
+        margin-top: 1rem;
+        border-top: 1px solid var(--#{$prefix}border-color);
+    }
+
+    .stat-sub {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-size: .85rem;
+
+        .stat-sub-label {
+            color: var(--#{$prefix}secondary-color);
+        }
+
+        .stat-sub-value {
+            font-weight: 600;
+        }
+    }
+}

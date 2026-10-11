@@ -1,0 +1,9 @@
+/*
+Bootstrap 5 entry — loaded separately so we can override variables above it.
+*/
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "variables";
+@import "variables-dark";
+@import "bootstrap/scss/bootstrap";
